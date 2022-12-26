@@ -1,0 +1,1594 @@
+//1.hashing
+//-------------------
+#include <iostream>
+#include <string>
+using namespace std;
+struct rec
+{
+	string name;
+	long int tel;
+	int comp;
+};
+
+class hasht
+{
+public:
+	rec Dir[10];
+	rec create();
+	int ascci(string);
+	void linear(rec L);
+	void quad(rec Q);
+	void display();
+	void searchlinear();
+	void searchquad();
+	hasht()
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			Dir[i].name = "none";
+			Dir[i].tel = 0;
+			Dir[i].comp = 0;
+		}
+	}
+};
+rec hasht ::create()
+{
+	char ch;
+	long int t;
+	string n;
+	rec data;
+
+	cout << "\nenter the name : ";
+	cin >> n;
+	cout << "\nenter the tel no : ";
+	cin >> t;
+
+	data.name = n;
+	data.tel = t;
+	return data;
+}
+
+int hasht ::ascci(string value)
+{
+	int ask = 0;
+	int sum = 0;
+	int i = 0;
+	while (value[i] != '\0')
+	{
+		sum = sum + int(value[i]);
+		i++;
+	}
+	ask = sum % 10;
+	return ask;
+}
+
+void hasht ::linear(rec L)
+{   
+	int c=1;
+	int pos = ascci(L.name);
+
+	while (Dir[pos].name != "none")
+	{
+		pos++;
+		c++;
+	}
+	Dir[pos].name = L.name;
+	Dir[pos].tel = L.tel;
+	Dir[pos].comp=c;
+	//	display();
+}
+
+void hasht ::quad(rec Q)
+{
+	int max = 10;
+	int pos = ascci(Q.name);
+	int z, i = 1;
+	int c=1;
+	z = pos;
+	while (Dir[pos].name != "none")
+	{
+		pos = (z + i * i) % max;
+		c++;
+		//cout<<c;
+		i++;
+	}
+	//cout<<"\n and "<<c;
+	Dir[pos].name = Q.name;
+	Dir[pos].tel = Q.tel;
+	Dir[pos].comp=c;
+	//	display();
+}
+
+void hasht ::display()
+{
+	for (int i = 0; i < 10; i++)
+	{
+		cout << Dir[i].name << "	" << Dir[i].tel << "	" << Dir[i].comp << endl;
+	}
+}
+
+void hasht ::searchlinear()
+{
+	int pos, max = 10, i = 1;
+	string n;
+	cout << "\nenter name which you have to search : ";
+	cin >> n;
+	pos = ascci(n);
+	while (Dir[pos].name != n)
+	{ 
+		pos++;
+	}
+	cout << "\ntel no of person is : " << Dir[pos].tel;
+	cout << "\ncomparision required to find it is " << Dir[pos].comp << endl;
+}
+
+void hasht ::searchquad() 
+{
+	int pos, max = 10, i = 1;
+	string n;
+	cout << "\nenter name which you have to search : ";
+	cin >> n;
+	pos = ascci(n);
+	int z = pos;
+	int flag=0;
+	while (Dir[pos].name != n)
+	{
+		pos = (z + i * i) % max;
+		i++;
+		flag=1;
+	}
+	if (flag==0)
+	{
+		cout<<"\nperson is not present";
+	}
+	else{
+	cout << "\ntel no of person is : " << Dir[pos].tel;
+	cout << "\ncomparision required to find it is " << Dir[pos].comp << endl;
+	}
+}
+
+int main()
+{
+	hasht h1, h2;
+	int op;
+	char ch;
+	rec e;
+	do
+	{
+		cout << "\nChoose one of the option below : "
+			 << "\n1. create"
+			 << "\n2. display linear"
+			 << "\n3. display quadratic"
+			 << "\n4. search in linear"
+			 << "\n5. search in quad"
+			 << "\nEnter option here : ";
+		cin >> op;
+		switch (op)
+		{
+		case 1:
+			do
+			{
+				e = h1.create();
+				h1.linear(e);
+				h2.quad(e);
+				cout << "\ndo you want to add info y or n : ";
+				cin >> ch;
+			} while (ch == 'y');
+			break;
+
+		case 2:
+			h1.display();
+			break;
+
+		case 3:
+			h2.display(); 
+			break;
+
+		case 4:
+			h1.searchlinear();
+			break;
+
+		case 5:
+			h2.searchquad();
+			break;
+		default:
+			cout << "\nInvalid option";
+		}
+		cout << "\n Do want do more opration : y or n : ";
+		cin >> ch;
+	} while (ch == 'y');
+
+	return 0;
+}
+
+//2.set
+//----------------
+#include <iostream>
+using namespace std;
+template <typename t>
+
+class setfunc
+{
+public:
+  t set[10];
+
+  setfunc()
+  {
+    for (int i = 0; i < 10; i++)
+    {
+      set[i] = 0;
+    }
+  }
+
+  // t set2[10];
+  // void create();
+  void display();
+  void insert();
+  void del(t);
+  int search(t);
+  int size();
+  void intersection(setfunc, setfunc);
+  void Union(setfunc, setfunc);
+  void differ(setfunc, setfunc);
+  void subset(setfunc, setfunc);
+};
+
+template <typename t>
+void setfunc<t>::insert()
+{
+  int i = 0, n1 = 0;
+  char c;
+  int size = 10;
+  t n;
+  do
+  {
+    if (n1 != size)
+    {
+      cout << "\neneter no :";
+      cin >> n;
+      set[i] = n;
+      i++;
+      n1++;
+    }
+    else
+    {
+      cout << "\nset if full";
+      break;
+    }
+    cout << "\ndo you want to add more ele ";
+    cin >> c;
+  } while (c == 'y');
+  cout << "\nlist is : ";
+  display();
+}
+
+template <typename t>
+int setfunc<t>::size()
+{
+  int i = 0, j = 0;
+  while (set[i] != 0)
+  {
+    i++;
+    j++;
+  }
+  return j;
+}
+
+template <typename t>
+int setfunc<t>::search(t ele)
+{
+  int a = size();
+  int i = 0;
+  for (i = 0; i < a; i++)
+  {
+    if (set[i] == ele)
+    {
+      return i;
+    }
+  }
+  return -1;
+}
+
+template <typename t>
+void setfunc<t>::del(t ele)
+{
+  t n;
+  int i;
+  int max = size();
+  if (search(ele) != -1)
+  {
+    n = search(ele);
+    for (i = n + 1; i < max; i++)
+    {
+      set[i - 1] = set[i];
+    }
+  }
+  set[i - 1] = 0;
+  cout << "\nupdated list is : ";
+  display();
+}
+
+template <typename t>
+void setfunc<t>::intersection(setfunc<t> s1, setfunc<t> s2)
+{
+  cout << "\nlist 1 is : ";
+  s1.display();
+  cout << "\nlist 2 is : ";
+  s2.display();
+  cout << "\nintersection is : ";
+  for (int i = 0; i < s1.size(); i++)
+  {
+    for (int j = 0; j <= s2.size(); j++)
+    {
+      if (s1.set[i] == s2.set[j])
+      {
+        cout << s1.set[i] << " ";
+        break;
+      }
+    }
+  }
+}
+
+template <typename t>
+void setfunc<t>::Union(setfunc<t> s1, setfunc<t> s2)
+{
+  int flag = 0;
+  int i = 0;
+  cout << "\nlist 1 is : ";
+  s1.display();
+  cout << "\nlist 2 is : ";
+  s2.display();
+  cout << "\nunion is : ";
+  for (i = 0; i < s1.size(); i++)
+  {
+    cout << s1.set[i] << " ";
+  }
+  for (int j = 0; j < s2.size(); j++)
+  {
+    flag = 0;
+    for (i = 0; i < s1.size(); i++)
+    {
+      if (s1.set[i] == s2.set[j])
+      {
+        flag = 1;
+        break;
+      }
+    }
+    if (flag == 0)
+    {
+      cout << s2.set[j] << " ";
+    }
+  }
+}
+
+template <typename t>
+void setfunc<t>::differ(setfunc<t> s1, setfunc<t> s2)
+{
+  int flag = 1;
+  cout << "\nlist 1 is : ";
+  s1.display();
+  cout << "\nlist 2 is : ";
+  s2.display();
+  cout << "\ndifference is : ";
+  for (int i = 0; i < s1.size(); i++)
+  {
+    for (int j = 0; j <= s2.size(); j++)
+    {
+      if (s1.set[i] == s2.set[j])
+      {
+        flag = 0;
+        break;
+      }
+      else
+        flag = 1;
+    }
+    if (flag == 1)
+    {
+      cout << s1.set[i] << " ";
+    }
+  }
+}
+
+template <class t>
+void setfunc<t>::subset(setfunc<t> s1, setfunc<t> s2)
+{
+  int count = 0;
+  int size = s2.size();
+  cout << "\nlist 1 is : ";
+  s1.display();
+  cout << "\nlist 2 is : ";
+  s2.display();
+  for (int i = 0; i < s1.size(); i++)
+  {
+    for (int j = 0; j < s2.size(); j++)
+    {
+      if (s1.set[i] == s2.set[j])
+      {
+        count++;
+        break;
+      }
+    }
+  }
+  if (count == size)
+  {
+    cout << "\nsubset property satisfy";
+  }
+  else
+  {
+    cout << "\nsubset property not satisfy";
+  }
+}
+
+template <typename t>
+void setfunc<t>::display()
+{
+  for (int i = 0; set[i] != 0; i++)
+  {
+    cout << set[i] << " ";
+  }
+}
+
+int main()
+{
+  setfunc<int> s1, s2;
+  int op;
+  char ch, c;
+  do
+  {
+    cout << "\nChoose one of the option below : "
+         << "\n1. create first set"
+         << "\n2. create second set"
+         << "\n3. Delete"
+         << "\n4. intersection"
+         << "\n5. union"
+         << "\n6. difference of two set "
+         << "\n7. subset"
+         << "\n8. display"
+         << "\nEnter option here : ";
+    cin >> op;
+    switch (op)
+    {
+    case 1:
+      s1.insert();
+      break;
+
+    case 2:
+      s2.insert();
+      break;
+
+    case 3:
+      int m, s;
+      char ab;
+      do
+      {
+        cout << "\nfrom which set do you want to delete ele 1 or 2 : ";
+        cin >> s;
+        if (s == 1)
+        {
+          cout << "\nenter which no do you want to delete : ";
+          cin >> m;
+          s1.del(m);
+        }
+        else
+        {
+          cout << "\nenter which no do you want to delete : ";
+          cin >> m;
+          s2.del(m);
+        }
+        cout << "\ndo you want delete more ele y or n : ";
+        cin >> ab;
+      } while (ab == 'y');
+      break;
+
+    case 4:
+      s1.intersection(s1, s2);
+      break;
+
+    case 5:
+      s1.Union(s1, s2);
+      break;
+
+    case 6:
+      s1.differ(s1, s2);
+      break;
+
+    case 7:
+      s1.subset(s1, s2);
+      break;
+
+    case 8:
+      cout << "\nlist 1 is : ";
+      s1.display();
+      cout << "\nlist 2 is : ";
+      s2.display();
+      break;
+
+    default:
+      cout << "\nInvalid option";
+    }
+    cout << "\nDo want do more opration : y or n : ";
+    cin >> ch;
+  } while (ch == 'y');
+
+  return 0;
+}
+
+//3.book
+/-------------------
+#include <iostream>
+using namespace std;
+
+struct node
+{
+    char title[10];
+    int childcount;
+    struct node *child[10];
+};
+
+int main()
+{
+    int chaptercount, sectioncount, subsectioncount;
+    node *root;
+
+    root = new node;
+    cout << "Enter title of Book : ";
+    cin >> root->title;
+    cout << "How many chapters in a book : ";
+    cin >> chaptercount;
+    root->childcount = chaptercount;
+
+    for (int i = 0; i < chaptercount; i++)
+    {
+        root->child[i] = new node;
+        cout << "Enter name of chapter " << i + 1 << " in a book : ";
+        cin >> root->child[i]->title;
+        cout << "Enter number of sections in chapter " << i + 1 << " : ";
+        cin >> root->child[i]->childcount;
+        sectioncount = root->child[i]->childcount;
+
+        for (int j = 0; j < sectioncount; j++)
+        {
+            root->child[i]->child[j] = new node;
+            cout << "\tEnter name of section " << j + 1 << " : ";
+            cin >> root->child[i]->child[j]->title;
+            cout << "\tEnter number of sub-sections in section " << j + 1 << " : ";
+            cin >> root->child[i]->child[j]->childcount;
+            subsectioncount = root->child[i]->child[j]->childcount;
+
+            for (int k = 0; k < subsectioncount; k++)
+            {
+                root->child[i]->child[j]->child[k] = new node;
+                cout << "\t\tEnter name of sub-section " << k + 1 << " : ";
+                cin >> root->child[i]->child[j]->child[k]->title;
+            }
+        }
+    }
+
+
+    cout << "\n----------------------------------------\n\t\t" << root->title << "\n----------------------------------------" << endl;
+
+    for (int i = 0; i < chaptercount; i++)
+    {
+        cout <<i+1<<" : "<< root->child[i]->title << endl;
+        sectioncount = root->child[i]->childcount;
+        for (int j = 0; j < sectioncount; j++)
+        {
+            cout << "\t" <<i+1<<"."<<j+1<<" : "<< root->child[i]->child[j]->title << endl;
+            subsectioncount = root->child[i]->child[j]->childcount;
+            for (int k = 0; k < subsectioncount; k++)
+            {
+                cout << "\t\t" <<i+1<<"."<<j+1<<"."<<k+1<<" : "<< root->child[i]->child[j]->child[k]->title << endl;
+            }
+        }
+    }
+
+    cout << "----------------------------------------";
+    return 0;
+}
+
+
+//4.bst.cpp
+//----------------------------------
+#include <iostream>
+using namespace std;
+
+struct node
+{
+  int data;
+  node *left;
+  node *right;
+};
+
+struct node *nnode;
+class BST
+{
+public:
+  node *root, *temp,*temp1, *temp2;
+  BST()
+  {
+    root = NULL;
+  }
+
+  void create();
+  void display(node *);
+  int longpath(node *);
+  void minvalue();
+  void search(node *);
+  void swap(node *temp);
+};
+
+void BST ::create()
+{
+  int x;
+  nnode = new node;
+  nnode->left = NULL;
+  nnode->right = NULL;
+  cout << "\nEnter data : ";
+  cin >> nnode->data;
+  x = nnode->data;
+  if (root == NULL)
+  {
+    root = nnode;
+    cout << "root is created\n";
+    cout << root->data << " x=" << x;
+  }
+  else
+  {
+    node *temp = root;
+    while ((temp->left != NULL && x < temp->data) || (temp->right != NULL && x > temp->data))
+    {
+      if (x < temp->data)
+      {
+        temp = temp->left;
+      }
+      else
+      {
+        temp = temp->right;
+      }
+    }
+    if (x < temp->data)
+    {
+      temp->left = nnode;
+      cout << "left is created\n";
+      cout << temp->left->data;
+    }
+    else
+    {
+      temp->right = nnode;
+      cout << "right is created\n";
+      cout << temp->right->data;
+    }
+  }
+}
+
+void BST ::display(node *temp)
+{
+  if (temp != NULL)
+  {
+    cout << temp->data << " ";
+    display(temp->left);
+    display(temp->right);
+  }
+}
+
+int BST ::longpath(node *temp)
+{
+  int ld, rd;
+  if (temp == NULL)
+  {
+    return 0;
+  }
+  else
+  {
+    ld = longpath(temp->left);
+    rd = longpath(temp->right);
+
+    if (ld > rd)
+      return (ld + 1);
+    else
+      return (rd + 1);
+  }
+}
+
+void BST ::minvalue()
+{
+  temp = root;
+  while (temp->left != NULL)
+  {
+    temp = temp->left;
+  }
+  cout << "\nmin value is : " << temp->data;
+}
+
+void BST ::search(node *temp)
+{
+  int k;
+  cout << "\nenter k : ";
+  cin >> k;
+  temp = root;
+  int flag = 0;
+  while (temp != NULL)
+  {
+    if (temp->data == k)
+    {
+      cout << "\nk found";
+      flag=1;
+      break;
+    }
+    else if (k < temp->data)
+    {
+      temp = temp->left;
+    }
+    else
+    {
+      temp = temp->right;
+    }
+  }
+    if (flag == 0)
+    {
+      cout << "\nkey not found ";
+    }
+    else
+    {
+      cout << "\nkey found";
+    }
+}
+
+void BST ::swap(node *temp)
+{
+  //temp=root;
+  if(temp!=NULL)
+  {
+  temp2 = temp->right;
+  temp->right = temp->left;
+  temp->left = temp2;
+  swap(temp->left);
+  swap(temp->right);
+  }
+}
+
+int main()
+{
+  BST b1;
+  char ch;
+  int l;
+  do
+  {
+    b1.create();
+    cout << "\ndo you want to add more y or n :";
+    cin >> ch;
+  } while (ch == 'y');
+
+  b1.display(b1.root);
+  b1.minvalue();
+  b1.search(b1.root);
+  l = b1.longpath(b1.root);
+  cout << "\nlong path : " << l;
+  b1.swap(b1.root);
+  cout<<"\nafter swap : ";
+  b1.display(b1.root);
+  return 0;
+}
+
+//5.expression.cpp
+//-----------------------------
+#include<iostream>
+#include<stack>
+
+
+using namespace std;
+
+struct node{
+node *l;
+node *r;
+char data;
+};
+node *root;
+void postorder(node* temp)
+{
+if(temp!=NULL)
+{
+postorder(temp->l);
+postorder(temp->r);
+cout<<temp->data;
+}
+}
+
+void create_tree()
+{int l,j;
+int i = 10;
+char ch;
+stack<node*>s;
+char arr[20];
+cout<<"\nEnter no of char in prefix exp";
+cin>>l;
+
+for(j=0;j<l;j++)
+{
+cout<<"enter the expression elements";
+cin>>arr[j];
+}
+
+
+i = l - 1;
+
+while(i>=0)
+{
+ch=arr[i];
+node* nnode=new node;
+nnode->data=ch;
+nnode->l=NULL;
+nnode->r=NULL;
+//cout<<"\n curr char is"<<ch;
+if(int(ch) >= 97 && ch<=122)
+{
+s.push(nnode);
+//cout<<"\n"<<nnode->data<<"is pushed";
+//cout<<s.top()->data;
+}
+else
+{
+nnode->l=s.top();
+s.pop();
+if (!s.empty())
+{
+	nnode->r = s.top();
+	s.pop();
+}
+s.push(nnode);
+
+}
+
+i--;
+
+}
+node* root = s.top();
+cout << "The postfix expression is";
+postorder(root);
+}
+
+void delete_tree()
+{
+	root=NULL;
+	cout<<"Tree is deleted.";
+}
+
+
+int main()
+{
+
+create_tree();
+
+delete_tree();
+return 0;
+}
+
+
+//6.bfsdfs
+//-----------------------
+#include <iostream>
+#include <stack>
+#include <queue>
+#include <string>
+using namespace std;
+
+class graph
+{
+public:
+  int mat[5][5];
+  void create();
+  void display();
+  int adjacent(int);
+  string check(int);
+  void DFS(int v1);
+  void BFS(int v1);
+  int visited[5];	
+  int visited2[5];
+  graph() 
+  {
+  for (int i = 0; i < 5; i++)
+  {
+    visited[i] = 0;
+    visited2[i]=0;
+  }
+  }
+};
+
+string graph ::check(int i)
+{
+  int op;
+  op = i;
+  switch (op)
+  {
+  case 0:
+    return "COMP ";
+    break;
+
+  case 1:
+    return "IT ";
+    break;
+
+  case 2:
+    return "ETC ";
+    break;
+
+  case 3:
+    return "ELE ";
+    break;
+
+  case 4:
+    return "CIVIL ";
+    break;
+  }
+}
+
+void graph ::create()
+{
+  int d;
+  int i, j;
+  for (i = 0; i < 5; i++)
+  {
+    for (j = i; j < 5; j++)
+    {
+      if (i == j)
+      {
+        mat[i][j] = 0;
+        continue;
+      }
+      string m, n;
+      m = check(i);
+      n = check(j);
+      cout << "\nenter the distance from " << m << " to " << n << " : ";
+      cin >> d;
+      mat[i][j] = d;
+      mat[j][i] = mat[i][j];
+    }
+  }
+}
+
+void graph ::DFS(int v1)
+{
+  stack<int> s1;
+  int v2;
+  cout<<"\nDFS : ";
+  cout << check(v1);
+  s1.push(v1);
+  visited[v1] = 1;
+  while (!s1.empty())
+  {
+    for (v2 = 0; v2 <= 4; v2++)
+    {
+      v1 = s1.top();
+      if (mat[v1][v2] != 0 && visited[v2] == 0 && v1 != v2)
+      {
+        cout << "-> ";
+        s1.push(v2);
+        cout << check(v2);
+        visited[v2] = 1;
+      }
+    }
+    s1.pop();
+  }
+}
+
+void graph::BFS(int v1)
+{
+  queue<int> que;
+  que.push(v1);
+  visited2[v1] = 1; 
+  cout<<"\nBFS : ";
+  while (!que.empty())
+  {
+    v1=que.front();
+    cout<<check(v1)<<" -> ";
+    que.pop();
+    for (int v2 = 0; v2 < 5; v2++)
+    {
+      if (mat[v1][v2] != 0 && visited2[v2] == 0 && v1 != v2)
+      {
+        que.push(v2);
+        visited2[v2] = 1;
+      }
+    }
+  }
+}
+
+void graph ::display()
+{
+  cout << "\tCOMP\t"
+       << "IT\t"
+       << "ETC\t"
+       << "ELE\t"
+       << "CIVIL\t" << endl;
+  for (int i = 0; i < 5; i++)
+  {
+
+    cout << check(i);
+    for (int j = 0; j < 5; j++)
+    {
+      cout << "\t" << mat[i][j];
+    }
+    cout << endl;
+  }
+}
+
+int main()
+{
+  graph g1;
+  int v1;
+  g1.create();
+  g1.display();
+  cout << "enter the starting depatment node "
+       << "\n0 for COMP "
+       << "\n1 for IT "
+       << "\n2 for ETC "
+       << "\n3 for ELE "
+       << "\n4 for CIVIL "
+       << "\n enter option here : ";
+  cin >> v1;
+  g1.DFS(v1);
+  g1.BFS(v1);
+  return 0;
+}
+
+
+//7.primsalgorithm
+//-------------------------
+
+
+#include <iostream>
+using namespace std;
+
+class graphpr
+{
+public:
+  int mat[6][6];
+  int visited[6];
+  void creation();
+  void displaygr();
+  int prim();
+  string find(int);
+ 
+};
+string graphpr ::find(int i)
+{
+  int op;
+  op = i;
+  switch (op)
+  {
+  case 0:
+    return "1";
+    break;
+
+  case 1:
+    return "2";
+    break;
+
+
+  case 2:
+    return "3";
+    break;
+
+  case 3:
+    return "4";
+    break;
+
+  case 4:
+    return "5";
+    break;
+  
+  case 5:
+    return "6";
+    break;
+}
+}
+void graphpr ::creation()
+{
+  int d;
+  int i, j;
+  for (i = 0; i < 6; i++)
+  {
+    for (j = i; j < 6; j++)
+    {
+      if (i == j)
+      {
+        mat[i][j] = 999;
+        continue;
+      }
+      string m, n;
+      m = find(i);
+      n = find(j);
+      cout << "\nenter the distance from " << m << " to " << n << " : ";
+      cin >> d;
+      mat[i][j] = d;
+      mat[j][i] = mat[i][j];
+    }
+  }
+}
+void graphpr ::displaygr()
+{
+  cout << "\t1\t"
+       << "2\t"
+       << "3\t"
+       << "4\t"
+       << "5\t" <<"6\t"<< endl;
+  for (int i = 0; i <6; i++)
+  {
+
+    cout << find(i);
+    for (int j = 0; j < 6; j++)
+    {
+      cout << "\t" << mat[i][j];
+    }
+    cout << endl;
+  }
+}
+int graphpr::prim()
+{
+int u,v;
+int count=1;
+int cost=0;
+int start;
+int min;
+int visited[6];
+for(int k=0;k<6;k++)
+{visited[k]=0;
+}
+cout<<"enter starting node"<<endl;
+cin>>start;
+visited[start-1]=1;
+while(count<6)
+{
+   min=999;
+   for(int i=1;i<=6;i++)
+    {
+      if(visited[i-1]==1)
+      {
+        for(int j=1;j<=6;j++)
+          {
+            if(visited[j-1]==0)
+             {
+              if(min>mat[i-1][j-1]);
+                 {
+                  min=mat[i-1][j-1];
+                  v=j-1;
+                  u=i-1;
+                  }
+              }
+            }
+       }
+     }
+cost=cost+min;
+count++;
+visited[v]=1;
+cout<<"edge"<<u+1<<","<<v+1<<endl;
+}
+cout<<"cost of minimum spanning tree is"<<cost;
+
+
+}
+int main()
+{
+graphpr g1;
+g1.creation();
+g1.displaygr();
+g1.prim();
+}
+
+
+//8.obsts
+//----------------------
+#include <iostream>
+#include<queue>
+using namespace std;
+class obst
+{
+	public:
+	int n,i,j,k,g;
+    int p[50],q[50],w[50][50],c[50][50],r[50][50];
+	string keys[10];
+	void create();
+	int mincost(int y,int z);
+    void display();
+};
+
+void obst::create()
+{
+	cout<<"Enter total number of keys : ";
+	cin>>n;
+	for(i=0;i<=n;i++)
+	{
+		keys[i]=i;
+	}			
+	for(i=1;i<=n;i++)	
+	{
+		cout<<"Enter probability of successful search p"<<i<<" : ";
+		cin>>p[i];
+	}
+	for(i=0;i<=n;i++)	
+	{
+		cout<<"Enter probability of unsuccessful search q"<<i<<": ";
+		cin>>q[i];
+	}
+	
+
+	for(i=0;i<=n;i++)
+	{
+		w[i][i]=q[i];
+		c[i][i]=0;
+		r[i][i]=0;
+	}
+	for(i=0;i<=n;i++)
+	{
+		j=i+1;
+		w[i][j]=p[j]+q[j]+w[i][j-1];
+		k=j;	
+		c[i][j]=w[i][j]+c[i][k-1]+c[k][j];
+		r[i][j]=k;
+	}
+	for(g=2;g<=n;g++)
+	{
+		for(i=0;i<n;i++)
+		{
+			j=i+g;
+			w[i][j]=p[j]+q[j]+w[i][j-1];
+			k=mincost(i,j);
+			c[i][j]=w[i][j]+c[i][k-1]+c[k][j];
+			r[i][j]=k;
+		}
+	}	
+}
+
+int obst::mincost(int y,int z)
+{
+	int k,m,cost,min=999;
+	for(m=(y+1);m<=z;m++)	
+	{
+		cost=c[y][m-1]+c[m][z];
+		if(cost<min)
+		{
+			min=cost;
+			k=m;
+		}
+	}
+	return k;
+}
+
+void obst::display()
+{
+	queue<int> que;
+	cout<<"\n------------------------------------------\nNode\t\tLeft\t\tRight\n------------------------------------------"<<endl;
+	que.push(0);
+	que.push(n);
+	while(!que.empty())
+	{
+		i=que.front();
+		que.pop();
+		j=que.front();
+		que.pop();
+		k=r[i][j];
+		cout<<"\n"<<k;
+		if(r[i][k-1]!=0)
+		{
+			cout<<"\t\t"<<r[i][k-1];
+			que.push(i);
+			que.push(k-1);			
+		}
+		else
+			cout<<"\t\tNULL";
+		if(r[k][j]!=0)
+		{
+			cout<<"\t\t"<<r[k][j];
+			que.push(k);
+			que.push(j);			
+		}
+		else
+			cout<<"\t\tNULL";
+	}
+	cout<<"\n------------------------------------------"<<endl;
+}
+
+int main()
+{
+	obst o;
+	o.create();
+	o.display();
+}
+
+
+//9.avl
+//-----------------------
+
+#include<iostream>
+using namespace std;
+ 
+
+struct avl_node
+{
+    int data;
+    struct avl_node *left;
+    struct avl_node *right;
+}*root;
+ 
+
+class avlTree
+{
+    public:
+        int height(avl_node *);
+        int diff(avl_node *);
+        avl_node *rr_rotation(avl_node *);
+        avl_node *ll_rotation(avl_node *);
+        avl_node *lr_rotation(avl_node *);
+        avl_node *rl_rotation(avl_node *);
+        avl_node* balance(avl_node *);
+        avl_node* insert(avl_node *, int );
+        void display(avl_node *, int);
+        
+        avlTree()
+        {
+            root = NULL;
+        }
+};
+ 
+
+int avlTree::height(avl_node *temp)
+{
+    int h = 0;
+    if (temp != NULL)
+    {
+        int l_height = height (temp->left);
+        int r_height = height (temp->right);
+        int max_height = max (l_height, r_height);
+        h = max_height + 1;
+    }
+    return h;
+}
+int avlTree::diff(avl_node *temp)
+{
+    int l_height = height (temp->left);
+    int r_height = height (temp->right);
+    int b_factor= l_height - r_height;
+    return b_factor;
+}
+ 
+
+avl_node *avlTree::rr_rotation(avl_node *parent)
+{
+    avl_node *temp;
+    temp = parent->right;
+    parent->right = temp->left;
+    temp->left = parent;
+    cout<<"RR rotation\n";
+    return temp;
+}
+
+avl_node *avlTree::ll_rotation(avl_node *parent)
+{
+    avl_node *temp;
+    temp = parent->left;
+    parent->left = temp->right;
+    temp->right = parent;
+    cout<<"LL rotation\n";
+    return temp;
+}
+ 
+
+avl_node *avlTree::lr_rotation(avl_node *parent)
+{
+    avl_node *temp;
+    temp = parent->left;
+    parent->left = rr_rotation (temp);
+    cout<<"LR rotation\n";
+    return ll_rotation (parent);
+}
+
+avl_node *avlTree::rl_rotation(avl_node *parent)
+{
+    avl_node *temp;
+    temp = parent->right;
+    parent->right = ll_rotation (temp);
+    cout<<"RL rotation\n";
+    return rr_rotation (parent);
+}
+ 
+
+avl_node *avlTree::balance(avl_node *temp)
+{
+    int bal_factor = diff (temp);
+    if (bal_factor > 1)
+    {
+        if (diff (temp->left) > 0)
+            temp = ll_rotation (temp);
+        else
+            temp = lr_rotation (temp);
+    }
+    else if (bal_factor < -1)
+    {
+        if (diff (temp->right) > 0)
+            temp = rl_rotation (temp);
+        else
+            temp = rr_rotation (temp);
+    }
+    return temp;
+}
+ 
+
+avl_node *avlTree::insert(avl_node *root, int value)
+{
+    if (root == NULL)
+    {
+        root = new avl_node;
+        root->data = value;
+        root->left = NULL;
+        root->right = NULL;
+        return root;
+    }
+    else if (value < root->data)
+    {
+        root->left = insert(root->left, value);
+        root = balance (root);
+    }
+    else if (value >= root->data)
+    {
+        root->right = insert(root->right, value);
+        root = balance (root);
+    }
+    return root;
+}
+ 
+
+void avlTree::display(avl_node *ptr, int level)
+{
+    int i;
+    if (ptr!=NULL)
+    {
+        display(ptr->right, level + 1);
+        printf("\n");
+        if (ptr == root)
+        cout<<"Root -> ";
+        for (i = 0; i < level && ptr != root; i++)
+            cout<<"        ";
+        cout<<ptr->data;
+        display(ptr->left, level + 1);
+    }
+}
+ 
+int main()
+{
+    int choice, item;
+    avlTree avl;
+    while (1)
+    {
+        cout<<"\n---------------------"<<endl;
+        cout<<"AVL Tree Implementation"<<endl;
+        cout<<"\n---------------------"<<endl;
+        cout<<"1.Insert Element into the tree"<<endl;
+        cout<<"2.Display Balanced AVL Tree"<<endl;
+        cout<<"3.Exit"<<endl;
+        cout<<"Enter your Choice: ";
+        cin>>choice;
+        switch(choice)
+        {
+        case 1:
+            cout<<"Enter value to be inserted: ";
+            cin>>item;
+            root = avl.insert(root, item);
+            break;
+        case 2:
+            if (root == NULL)
+            {
+                cout<<"Tree is Empty"<<endl;
+                continue;
+            }
+            cout<<"Balanced AVL Tree:"<<endl;
+            avl.display(root, 1);
+            break;
+        case 3:
+            exit(1);    
+            break;
+        default:
+            cout<<"Wrong Choice"<<endl;
+        }
+    }
+    return 0;
+}
+ 
+10.heap
+//---------------------
+#include<iostream>
+using namespace std;
+
+class heap
+{
+ public:
+	int h[30];
+	int n;
+	heap()
+	{
+          cout<<"\nenter count of nos : ";
+          cin>>n;
+	  cout<<"\nenter nos : \n";
+	  for(int i=1; i<=n; i++)	
+	  {
+	    cin>>h[i];
+          }
+	}
+        void buildheap(int h[], int n);
+        void heapify(int h[], int i, int n);
+        void result();
+        void print();
+};
+
+void heap :: buildheap(int h[], int n)
+{
+print();
+for(int i=n/2; i>=1; i--)
+{
+  heapify(h,i,n); 
+}
+}
+
+void heap :: heapify(int h[], int i, int n)
+{
+int largei=i;
+int left=2*i;
+int right=2*i+1;
+
+if(left <= n && h[left] > h[i])
+{
+  largei=left;
+}
+
+if(right <= n && h[right] > h[largei])
+{
+  largei=right;
+}
+
+if(largei != i)
+{
+  int t;
+  t=h[i];
+  h[i]=h[largei];
+  h[largei]=t;
+  heapify(h,largei,n);
+}
+}
+
+void heap :: print()
+{
+cout<<endl;
+for(int i=1; i<=n; i++)	
+ {
+  cout<<h[i]<<" ";
+ }
+}
+
+void heap :: result()
+{
+int size=n;
+for(int i=n; i>=2; i--)
+{
+  int t;
+  t=h[i];
+  h[i]=h[1];
+  h[1]=t;
+  size--;
+  heapify(h,1,size);
+}
+
+cout<<"\n";
+print();
+cout<<"\nmaximum no is : "<<h[n];
+cout<<"\nminimum no is : "<<h[1]<<endl;
+}
+
+int main()
+{
+heap h1;
+h1.buildheap(h1.h,h1.n);
+h1.print();
+h1.result();
+return 0;
+}
+
+
